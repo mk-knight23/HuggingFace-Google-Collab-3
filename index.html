@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech Generation with LLM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card li:last-child {
+            border-bottom: none;
+        }
+
+        .code-section {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .code-section pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 3rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🗣️ Text-to-Speech Generation</h1>
+            <p>Using Hugging Face Transformers and Bark TTS Model</p>
+        </header>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>🚀 Quick Start</h2>
+                <p>Get started with text-to-speech in just a few lines of code:</p>
+                <div class="code-section">
+                    <pre>pip install transformers torch IPython</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📋 Requirements</h2>
+                <ul>
+                    <li>Python 3.7+</li>
+                    <li>transformers library</li>
+                    <li>torch</li>
+                    <li>IPython (for notebooks)</li>
+                    <li>CUDA-compatible GPU (recommended)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast Processing</h3>
+                <p>GPU acceleration with CUDA support</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>High Quality</h3>
+                <p>Natural-sounding speech with Bark TTS</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔧</div>
+                <h3>Easy Setup</h3>
+                <p>Minimal code with Hugging Face pipeline</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>Interactive</h3>
+                <p>Jupyter notebook ready</p>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>📝 Implementation Example</h2>
+            <p>Here's how to use the text-to-speech pipeline:</p>
+            <div class="code-section">
+                <pre>from transformers import pipeline
+from IPython.display import Audio
+
+# Initialize TTS pipeline
+pipe = pipeline("text-to-speech", 
+                model="suno/bark-small", 
+                device="cuda")
+
+# Generate speech
+text = "Hello, this is AI-generated speech!"
+output = pipe(text)
+
+# Play audio
+Audio(output["audio"], 
+      rate=output["sampling_rate"])</pre>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>🔬 Technical Details</h2>
+                <ul>
+                    <li><strong>Model:</strong> suno/bark-small</li>
+                    <li><strong>Framework:</strong> Hugging Face Transformers</li>
+                    <li><strong>Task:</strong> text-to-speech</li>
+                    <li><strong>Output:</strong> Audio array + sampling rate</li>
+                    <li><strong>Format:</strong> WAV compatible</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🎯 Use Cases</h2>
+                <ul>
+                    <li>Educational content creation</li>
+                    <li>Accessibility tools</li>
+                    <li>Voice assistants</li>
+                    <li>Content narration</li>
+                    <li>Language learning</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>📁 Project Files</h2>
+            <div class="code-section">
+                <pre>├── Text_to_speech_generation_with_LLM_with_hugging_face.ipynb
+├── SUMMARY.md          # Technical summary
+├── README.md          # Complete documentation
+└── index.html         # This website</pre>
+            </div>
+            <a href="Text_to_speech_generation_with_LLM_with_hugging_face.ipynb" class="btn">📓 Open Jupyter Notebook</a>
+            <a href="README.md" class="btn" style="margin-left: 1rem;">📖 View README</a>
+        </div>
+
+        <footer class="footer">
+            <p>Built with ❤️ using Hugging Face Transformers and Bark TTS</p>
+            <p>© 2024 Text-to-Speech Generation Project</p>
+        </footer>
+    </div>
+</body>
+</html>
